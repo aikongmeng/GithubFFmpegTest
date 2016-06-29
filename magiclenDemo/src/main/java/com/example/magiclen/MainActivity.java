@@ -14,7 +14,10 @@ import org.magiclen.magiccommand.CommandListener;
 
 import java.io.File;
 
-
+/**
+ * 執行FFMPEG COMMAND LINE
+ * @author akm
+ */
 public class MainActivity extends ActionBarActivity {
     protected static final int WHAT_BEGIN = 0x002320;
     protected static final int WHAT_ERROR = 0x002321;
@@ -133,8 +136,6 @@ public class MainActivity extends ActionBarActivity {
                             msg.obj = time;
                             msg.what = WHAT_COMPLETE;
                             handler.sendMessage(msg);
-
-
                         }
                     });
                     command.runAsync();
