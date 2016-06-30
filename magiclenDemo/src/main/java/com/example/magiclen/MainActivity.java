@@ -154,7 +154,6 @@ public class MainActivity extends ActionBarActivity {
                     File fileBin = new File(FileUtils.getFFmpeg(MainActivity.this));
                     File fileBinDir =new File(MainActivity.this.getFilesDir().getAbsolutePath());
                     String[] cmds = (FileUtils.getFFmpeg(MainActivity.this) + " " + cmd.getText().toString()).split(" ");
-//                  String cmds = FileUtils.getFFmpeg(MainActivity.this) + " -i /storage/emulated/0/DCIM/Camera/20160614_174328.mp4 -strict -2 -threads 14 -vf crop=ih*6.8/16:ih:0:0,scale=-1:1280 /storage/emulated/0/com.toge.ta/Images/download/template/res/file/1467263917094xxxx"+System.currentTimeMillis()+"xxxxxx.mp4";
 //                  String cmds = FileUtils.getFFmpeg(MainActivity.this) +" -version";
 
                     if (!fileBin.exists()) {
