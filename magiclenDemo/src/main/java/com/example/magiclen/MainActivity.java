@@ -1,24 +1,30 @@
 package com.example.magiclen;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.magiclen.magiccommand.Command;
 import org.magiclen.magiccommand.CommandListener;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 /**
  * 執行FFMPEG COMMAND LINE
+ *
  * @author akm
  */
 public class MainActivity extends ActionBarActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
     protected static final int WHAT_BEGIN = 0x002320;
     protected static final int WHAT_ERROR = 0x002321;
     protected static final int WHAT_COMPLETE = 0x002322;
@@ -43,7 +49,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void onClick(View v) {
         info_layout.removeAllViews();
-        ffmpegmain();
+//        ffmpegmain();
+        new CopyAndLoadFFmpegBinaryToAssets().execute();
     }
 
 
@@ -77,6 +84,140 @@ public class MainActivity extends ActionBarActivity {
         ;
     };
 
+    private class CopyAndLoadFFmpegBinaryToAssets extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            String ffmpegBinaryName = "libffmpeg.so";
+
+            boolean hasFileCopied = FileUtils.copyBinaryFromAssetsToData(MainActivity.this, ffmpegBinaryName, FileUtils.ffmpegFileName);
+
+            // make directory executable
+            if (hasFileCopied) {
+                String filesDirectoryPath = FileUtils.getFilesDirectory(MainActivity.this).getAbsolutePath();
+                File ffmpegFile = new File(filesDirectoryPath + File.separator + FileUtils.ffmpegFileName);
+
+                if (!ffmpegFile.canExecute()) {
+                    Log.d(TAG, "FFmpeg File is not executable, trying to make it executable ...");
+                    if (ffmpegFile.setExecutable(true)) {
+                        return true;
+                    }
+                } else {
+                    Log.d(TAG, "FFmpeg file is executable");
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean loaded) {
+            if (loaded) {
+
+                ffmpegmain_assets();
+//                try {
+////                    String cmds = FileUtils.getFFmpeg(MainActivity.this) + cmd.getText().toString();
+//                    String cmds = FileUtils.getFFmpeg(MainActivity.this) + " -i /storage/emulated/0/DCIM/Camera/20160614_174328.mp4  -strict -2 /storage/emulated/0/DCIM/Camera/20160614_174328_out.mp4 ";
+//                    Process process = Runtime.getRuntime().exec(cmds);
+//                    if (process.waitFor() == 0) {
+//                        // success
+//                        String is = new String(FileUtils.inputStreamToByteArray(process.getInputStream()));
+//                        Log.d(TAG, "process.getInputStream returns : " + is);
+//                        setText("SUCCESS : " + is);
+//                    } else {
+//                        // failure
+//                        String error = new String(FileUtils.inputStreamToByteArray(process.getErrorStream()));
+//                        Log.d(TAG, "process.getErrorStream returns : " + error);
+//                        setText("ERROR : " + error);
+//                    }
+//                    Log.d(TAG, "process output : " + process.waitFor());
+//                } catch (IOException e) {
+//                    Log.e(TAG, "IOException while getting ffmpeg version", e);
+//                } catch (InterruptedException e) {
+//                    Log.e(TAG, "FFmpeg command interrupted", e);
+//                }
+            } else {
+                setText("Device Not Supported");
+            }
+        }
+    }
+
+    private void ffmpegmain_assets() {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+
+                    //commands
+                    File fileBin = new File(FileUtils.getFFmpeg(MainActivity.this));
+                    File fileBinDir =new File(MainActivity.this.getFilesDir().getAbsolutePath());
+                    String[] cmds = (FileUtils.getFFmpeg(MainActivity.this) + " " + cmd.getText().toString()).split(" ");
+//                  String cmds = FileUtils.getFFmpeg(MainActivity.this) + " -i /storage/emulated/0/DCIM/Camera/20160614_174328.mp4 -strict -2 -threads 14 -vf crop=ih*6.8/16:ih:0:0,scale=-1:1280 /storage/emulated/0/com.toge.ta/Images/download/template/res/file/1467263917094xxxx"+System.currentTimeMillis()+"xxxxxx.mp4";
+//                  String cmds = FileUtils.getFFmpeg(MainActivity.this) +" -version";
+
+                    if (!fileBin.exists()) {
+                        Message msg = Message.obtain();
+                        msg.obj = "file not found..";
+                        msg.what = WHAT_ERROR;
+                        handler.sendMessage(msg);
+                        return;
+                    }
+
+                    Command command = new Command(Charset.defaultCharset(),cmds);
+                    command.setDefaultDirectory(fileBinDir);
+                    command.setCommandListener(new CommandListener() {
+
+                        @Override
+                        public void commandStart(String arg0) {
+                            time = System.currentTimeMillis();
+                            System.out.println("command start " + arg0);
+                            Message msg = Message.obtain();
+                            msg.obj = arg0;
+                            msg.what = WHAT_BEGIN;
+                            handler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void commandRunning(String arg0, String arg1, boolean arg2) {
+                            System.out.println("command running " + arg1);
+                            Message msg = Message.obtain();
+                            msg.obj = arg1;
+                            msg.what = WHAT_RUNNING;
+                            handler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void commandException(String arg0, Exception arg1) {
+                            System.out.println("command err " + arg0 + ",-->" + arg1);
+                            Message msg = Message.obtain();
+                            msg.obj = arg1;
+                            msg.what = WHAT_ERROR;
+                            handler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void commandEnd(String arg0, int arg1) {
+                            time = System.currentTimeMillis() - time;
+                            System.out.println("command end " + arg0 + "-->time:" + time);
+                            Message msg = Message.obtain();
+                            msg.obj = time;
+                            msg.what = WHAT_COMPLETE;
+                            handler.sendMessage(msg);
+                        }
+                    });
+                    command.runAsync();
+                } catch (Exception e) {
+                    Message msg = Message.obtain();
+                    msg.obj = e.getLocalizedMessage();
+                    msg.what = WHAT_ERROR;
+                    handler.sendMessage(msg);
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
 
     private void ffmpegmain() {
         new Thread() {
