@@ -16,9 +16,11 @@ ProcessBuilder使用編譯好的libffmpeg.so
 
 遺留問題:
 
-1.android 6.0 報:only position independent executables(PIE) are supported. 
-2.galaxy note3 lite android 4.3 
-> java.lang.SecurityException: Permission Denial: get/set setting for user asks to run as user -2 but is calling from user 0; this requires android.permission.INTERACT_ACROSS_USERS_FULL
+1. android 6.0 
+> :only position independent executables(PIE) are supported. 
+2. galaxy note3 lite android 4.3 
+```java
+java.lang.SecurityException: Permission Denial: get/set setting for user asks to run as user -2 but is calling from user 0; this requires android.permission.INTERACT_ACROSS_USERS_FULL
                                                    at com.android.server.am.ActivityManagerService.handleIncomingUser(ActivityManagerService.java:13466)
                                                    at android.app.ActivityManager.handleIncomingUser(ActivityManager.java:2058)
                                                    at com.android.providers.settings.SettingsProvider.callFromPackage(SettingsProvider.java:615)
@@ -26,7 +28,8 @@ ProcessBuilder使用編譯好的libffmpeg.so
                                                    at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:273)
                                                    at android.os.Binder.execTransact(Binder.java:388)
                                                    at dalvik.system.NativeStart.run(Native Method)
-
+                                    
+```
 
 參考鏈接: 
 
