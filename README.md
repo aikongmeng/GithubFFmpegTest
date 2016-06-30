@@ -1,17 +1,16 @@
-# GithubFFmpegTest
-ffmpeg command line 測試
+# ffmpeg demo
+ 在Android上執行ffmpeg command line.
 
-##akmffmpeg
+####akmffmpeg
 
 修改ffmpeg.c,添加jni.
 
-基於預編譯庫編譯新的庫. 
+基於預編譯庫編譯新的庫.  
 
-
-##magiclenDemo
+####magiclenDemo
 ProcessBuilder使用編譯好的libffmpeg.so 执行ffmpeg command line 
 
-##參考鏈接: 
+######參考鏈接
 
 * [simplest_ffmpeg_android_transcoder](https://github.com/leixiaohua1020/simplest_ffmpeg_mobile/tree/master/simplest_ffmpeg_android_transcoder)
 
