@@ -10,6 +10,9 @@
 ####magiclenDemo
 ProcessBuilder使用編譯好的libffmpeg.so 执行ffmpeg command line 
 
+[DEMO截图](https://github.com/aikongmeng/GithubFFmpegTest/blob/master/magiclenDemo/device-2016-06-30-154941.png)
+
+
 ######參考鏈接
 
 * [simplest_ffmpeg_android_transcoder](https://github.com/leixiaohua1020/simplest_ffmpeg_mobile/tree/master/simplest_ffmpeg_android_transcoder)
