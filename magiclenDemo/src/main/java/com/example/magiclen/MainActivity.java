@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String ffmpegBinaryName = "libffmpeg.so";
+            String ffmpegBinaryName = FileUtils.ffmpegFileName;
 
             boolean hasFileCopied = FileUtils.copyBinaryFromAssetsToData(MainActivity.this, ffmpegBinaryName, FileUtils.ffmpegFileName);
 
@@ -145,9 +145,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void ffmpegmain_assets() {
-        new Thread() {
-            @Override
-            public void run() {
+//        new Thread() {
+//            @Override
+//            public void run() {
                 try {
 
                     //commands
@@ -206,7 +206,7 @@ public class MainActivity extends ActionBarActivity {
                             handler.sendMessage(msg);
                         }
                     });
-                    command.runAsync();
+                    command.run();
                 } catch (Exception e) {
                     Message msg = Message.obtain();
                     msg.obj = e.getLocalizedMessage();
@@ -214,8 +214,8 @@ public class MainActivity extends ActionBarActivity {
                     handler.sendMessage(msg);
                     e.printStackTrace();
                 }
-            }
-        }.start();
+//            }
+//        }.start();
     }
 
     private void ffmpegmain() {
@@ -224,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
             public void run() {
                 try {
                     File fileBinDir = new File(MainActivity.this.getFilesDir().getParentFile(), "lib"); //FFmpeg執行檔的所在目錄
-                    File fileBin = new File(fileBinDir, "libffmpeg.so"); //FFmpeg執行檔的檔案路徑
+                    File fileBin = new File(fileBinDir, "libffmpeg_0.so"); //FFmpeg執行檔的檔案路徑
                     //commands
                     String[] cmds = (fileBin.getAbsolutePath() + " " + cmd.getText().toString()).split(" ");
 

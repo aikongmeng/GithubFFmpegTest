@@ -50,7 +50,7 @@ public class Command {
 	    return new String[0];
 	}
 	commandLine = commandLine.trim() + " ";
-	final ArrayList<String> al = new ArrayList<>();
+	final ArrayList<String> al = new ArrayList<String>();
 	final StringBuilder sb = new StringBuilder();
 	final char[] commandLineChars = commandLine.toCharArray();
 	boolean appendMode = false, quoteMode = false;
@@ -138,8 +138,8 @@ public class Command {
     }
 
     //-----物件常數-----
-    private final ArrayList<String> cmdArgs = new ArrayList<>(); //儲存命令與參數
-    private final HashMap<String, Process> processes = new HashMap<>(); //儲存正在執行的Process
+    private final ArrayList<String> cmdArgs = new ArrayList<String>(); //儲存命令與參數
+    private final HashMap<String, Process> processes = new HashMap<String,Process>(); //儲存正在執行的Process
 
     //-----物件變數-----
     private long idNumberCounter = 0; //ID計數器
@@ -192,7 +192,7 @@ public class Command {
      * @throws RuntimeException 如果建構命令物件的過程發生問題，將拋出此例外
      */
     public Command(final Charset charset, final String... args) throws RuntimeException {
-	initial(StandardCharsets.UTF_8, args);
+	initial(charset, args);
     }
 
     //-----物件方法-----
