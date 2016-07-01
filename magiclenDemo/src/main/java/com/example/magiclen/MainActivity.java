@@ -145,9 +145,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void ffmpegmain_assets() {
-//        new Thread() {
-//            @Override
-//            public void run() {
+        new Thread() {
+            @Override
+            public void run() {
                 try {
 
                     //commands
@@ -214,8 +214,8 @@ public class MainActivity extends ActionBarActivity {
                     handler.sendMessage(msg);
                     e.printStackTrace();
                 }
-//            }
-//        }.start();
+            }
+        }.start();
     }
 
     private void ffmpegmain() {
