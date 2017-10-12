@@ -24,3 +24,13 @@ ProcessBuilder使用編譯好的libffmpeg.so 执行ffmpeg command line
 * [android-ffmpeg](https://magiclen.org/android-ffmpeg/)
 
 * [question](http://ffmpeg.gusari.org/viewtopic.php?f=8&t=1181)
+
+### ffmpeg 常用命令
+视频转图片
+>ffmpeg -i /Users/Arjun/Downloads/a.mov -r 5 -f /Users/Arjun/Downloads/image-2%d.jpeg
+>ffmpeg -i /Users/Arjun/Downloads/b.mov -r 10 -q:v 2 -f image2 /Users/Arjun/Downloads/image-%d.jpeg
+
+视频截取
+>ffmpeg -i /Users/Arjun/Downloads/a.mov -vcodec copy -acodec copy -ss 00:00:00.55 -to  00:00:03.52 /Users/Arjun/Downloads/b.mov -y -ss time_off 
+
+
