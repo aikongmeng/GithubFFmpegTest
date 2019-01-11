@@ -10,8 +10,14 @@
 #### magiclenDemo
 ProcessBuilder使用編譯好的libffmpeg.so 执行ffmpeg command line 
 
-[DEMO截图](https://github.com/aikongmeng/GithubFFmpegTest/blob/master/magiclenDemo/device-2016-06-30-154941.png)
-
+ <p align="left">
+        <em>DEMO截图</em>
+ </p>
+ <p align="left">
+    <img src="https://github.com/aikongmeng/GithubFFmpegTest/blob/master/magiclenDemo/device-2016-06-30-154941.png" alt="DEMO截图"  width="320" height="480">
+ </p>
+   
+ 
 
 ###### 參考鏈接
 
